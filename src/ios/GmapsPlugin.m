@@ -1,4 +1,5 @@
 #import "GmapsPlugin.h"
+#import "GmapsRequestBuilder.h"
 #import <Cordova/CDVPlugin.h>
 #import <GoogleMaps/GoogleMaps.h>
 
@@ -91,12 +92,13 @@
 
 - (void)directions:(CDVInvokedUrlCommand*)command
 {
-    NSArray *params = [command.arguments objectAtIndex:0];
+    NSArray *inputWaypoints = [command.arguments objectAtIndex:0];
+    NSDictionary *routeParams = [command.arguments objectAtIndex:1];
+    NSString *query = [[[GmapsRequestBuilder alloc] init] execute:inputWaypoints withParams:routeParams];
+
     NSString *url = [NSString stringWithFormat:
-                     @"https://maps.googleapis.com/maps/api/directions/json?origin=%@&destination=%@",
-                     [params objectAtIndex:0],
-                     [params objectAtIndex:[params count] - 1]
-                     ];
+                     @"https://maps.googleapis.com/maps/api/directions/json?%@",
+                     query];
 
     NSLog(@"URL for directions: %@", url);
 
@@ -114,7 +116,7 @@
     NSString *points = [polylineOverview objectForKey:@"points"];
     GMSPath *path = [GMSPath pathFromEncodedPath:points];
 
-    NSMutableArray *waypoints = [[NSMutableArray alloc] init];
+    NSMutableArray *routeWaypoints = [[NSMutableArray alloc] init];
     for (int i=0; i<path.count; i++) {
         CLLocationCoordinate2D location = [path coordinateAtIndex: (NSUInteger)i];
         NSDictionary *waypoint = @{
@@ -122,13 +124,19 @@
                                    @"lng": @(location.longitude)
                                    };
 
-        [waypoints addObject:waypoint];
+        [routeWaypoints addObject:waypoint];
 
     }
 
+    NSNumber *distance = @(0);
+    NSArray *legs = [[[results objectForKey:@"routes"] objectAtIndex:0] objectForKey:@"legs"];
+    for (NSDictionary *leg in legs) {
+        distance = @([[leg objectForKey:@"distance"] intValue] + [distance intValue]);
+    }
+
     NSDictionary *result = @{
-                             @"waypoints": waypoints,
-                             @"distance": @0 // TODO
+                             @"waypoints": routeWaypoints,
+                             @"distance": distance
                              };
 
     CDVPluginResult* pluginResult = nil;

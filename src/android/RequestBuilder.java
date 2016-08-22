@@ -29,6 +29,14 @@ public class RequestBuilder {
                 query.put("waypoints", existingWaypoints + "|" + waypoints.getString(i));
             }
 
+            if (routeParams.has("unit")) {
+                query.put("unit", routeParams.get("unit"));
+            }
+
+            if (routeParams.has("avoid")) {
+                query.put("avoid", routeParams.get("avoid"));
+            }
+
             return getQueryString(query);
 
         }catch (JSONException e) {

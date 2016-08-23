@@ -25,6 +25,12 @@
 
 	  <framework src="com.google.android.gms:play-services-location:+" />
 
+    <source-file src="src/android/DirectionsParserTask.java" target-dir="src/plugin/gmaps/addons/" />
+    <source-file src="src/android/DirectionsReadTask.java" target-dir="src/plugin/gmaps/addons/" />
+    <source-file src="src/android/DirectionsRequestBuilder.java" target-dir="src/plugin/gmaps/addons/" />
+    <source-file src="src/android/HttpConnection.java" target-dir="src/plugin/gmaps/addons/" />
+    <source-file src="src/android/ICallBackListener.java" target-dir="src/plugin/gmaps/addons/" />
+    <source-file src="src/android/PathJSONParser.java" target-dir="src/plugin/gmaps/addons/" />
     <source-file src="src/android/Plugin.java" target-dir="src/plugin/gmaps/addons/" />
   </platform>
 
@@ -38,6 +44,9 @@
 
       <header-file src="src/ios/GmapsPlugin.h" />
       <source-file src="src/ios/GmapsPlugin.m" />
+
+      <header-file src="src/ios/GmapsRequestBuilder.h" />
+      <source-file src="src/ios/GmapsRequestBuilder.m" />
 
       <dependency id="com.googlemaps.ios" url="https://bitbucket.org/nightstomp/cordova-plugin-googlemaps-sdk.git" commit="master" />
   </platform>

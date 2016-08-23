@@ -1,4 +1,4 @@
-package com.cleemy.maps;
+package plugin.gmaps.addons;
 
 import java.io.BufferedReader;
 import java.io.IOException;

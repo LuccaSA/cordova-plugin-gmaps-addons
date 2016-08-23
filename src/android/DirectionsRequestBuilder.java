@@ -1,4 +1,4 @@
-package com.cleemy.maps;
+package plugin.gmaps.addons;
 
 import android.util.Log;
 
@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import java.security.InvalidParameterException;
 import java.util.Iterator;
 
-public class RequestBuilder {
+public class DirectionsRequestBuilder {
 
     public String execute(JSONArray waypoints, JSONObject routeParams) {
         int waypointsLength = waypoints.length();

@@ -1,12 +1,12 @@
-package com.cleemy.maps;
+package plugin.gmaps.addons;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class ReadTask extends AsyncTask<String, Void, String> {
+public class DirectionsReadTask extends AsyncTask<String, Void, String> {
     private ICallBackListener _listener;
 
-    public ReadTask(ICallBackListener listener) {
+    public DirectionsReadTask(ICallBackListener listener) {
         _listener = listener;
     }
 
@@ -25,6 +25,6 @@ public class ReadTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        new ParserTask(_listener).execute(result);
+        new DirectionsParserTask(_listener).execute(result);
     }
 }

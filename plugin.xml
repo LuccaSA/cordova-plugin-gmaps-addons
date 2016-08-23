@@ -22,7 +22,7 @@
 
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="Maps">
-        <param name="android-package" value="com.cleemy.maps.Plugin" />
+        <param name="android-package" value="plugin.gmaps.addons.Plugin" />
       </feature>
     </config-file>
 
@@ -35,7 +35,7 @@
 		android:value="$API_KEY_FOR_ANDROID" />
 	</config-file>
 
-    <source-file src="src/android/Plugin.java" target-dir="src/com/cleemy/maps/" />
+    <source-file src="src/android/Plugin.java" target-dir="src/plugin/gmaps/addons/" />
   </platform>
 
   <!-- ios -->

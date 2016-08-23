@@ -1,4 +1,4 @@
-package com.cleemy.maps;
+package plugin.gmaps.addons;
 
 
 public interface ICallBackListener<T> {

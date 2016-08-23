@@ -1,14 +1,14 @@
-package com.cleemy.maps;
+package plugin.gmaps.addons;
 
 import android.os.AsyncTask;
 
 import org.json.JSONObject;
 
-public class ParserTask extends AsyncTask<String, Integer, JSONObject> {
+public class DirectionsParserTask extends AsyncTask<String, Integer, JSONObject> {
 
     private ICallBackListener _listener;
 
-    public ParserTask(ICallBackListener listener) {
+    public DirectionsParserTask(ICallBackListener listener) {
         _listener = listener;
     }
 

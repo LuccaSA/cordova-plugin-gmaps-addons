@@ -1,4 +1,4 @@
-package com.cleemy.maps;
+package plugin.gmaps.addons;
 
 import android.util.Log;
 
@@ -25,7 +25,7 @@ import java.util.Iterator;
 
 public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObject> {
 
-    public static final String TAG = "Cleemy-AutoComplete";
+    public static final String TAG = "GMAPS-ADDONS";
     private GoogleApiClient _googleApiClient;
     private CallbackContext _callbackContext;
 
@@ -139,11 +139,11 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
     }
 
     private void getDirections(JSONArray waypoints, JSONObject routeParams, CallbackContext callbackContext) {
-        String params = new RequestBuilder().execute(waypoints, routeParams);
+        String params = new DirectionsRequestBuilder().execute(waypoints, routeParams);
         String url = "https://maps.googleapis.com/maps/api/directions/json?" + params;
 
         Log.d(TAG, "Asynchronously downloading directions");
-        ReadTask downloadTask = new ReadTask(this);
+        DirectionsReadTask downloadTask = new DirectionsReadTask(this);
         downloadTask.execute(url);
 
         PluginResult pluginResult = new PluginResult(PluginResult.Status.NO_RESULT);

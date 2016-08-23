@@ -1,4 +1,4 @@
-package com.cleemy.maps;
+package plugin.gmaps.addons;
 
 import org.json.JSONArray;
 import org.json.JSONException;

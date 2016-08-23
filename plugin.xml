@@ -32,6 +32,14 @@
     <source-file src="src/android/ICallBackListener.java" target-dir="src/plugin/gmaps/addons/" />
     <source-file src="src/android/PathJSONParser.java" target-dir="src/plugin/gmaps/addons/" />
     <source-file src="src/android/Plugin.java" target-dir="src/plugin/gmaps/addons/" />
+
+    <preference name="API_KEY_FOR_ANDROID" />
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <meta-data
+      android:name="com.google.android.geo.API_KEY"
+      android:value="$API_KEY_FOR_ANDROID" />
+    </config-file>
+
   </platform>
 
   <!-- ios -->

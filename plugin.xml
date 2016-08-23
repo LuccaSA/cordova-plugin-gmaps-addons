@@ -12,13 +12,10 @@
     <clobbers target="gmaps-addons" />
   </js-module>
 
+  <dependency id="cordova-plugin-googlemaps" url="https://github.com/mapsplugin/cordova-plugin-googlemaps" />
+
   <!-- android -->
   <platform name="android">
-
-	<info>
-		In order to run this plugin, you need to obtain Google Maps API key.
-		Visit https://developers.google.com/maps/documentation/android-api/
-	</info>
 
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="Maps">
@@ -26,14 +23,7 @@
       </feature>
     </config-file>
 
-	<framework src="com.google.android.gms:play-services-location:+" />
-
-	<preference name="API_KEY_FOR_ANDROID" />
-	<config-file target="AndroidManifest.xml" parent="/manifest/application">
-	  <meta-data
-		android:name="com.google.android.geo.API_KEY"
-		android:value="$API_KEY_FOR_ANDROID" />
-	</config-file>
+	  <framework src="com.google.android.gms:play-services-location:+" />
 
     <source-file src="src/android/Plugin.java" target-dir="src/plugin/gmaps/addons/" />
   </platform>

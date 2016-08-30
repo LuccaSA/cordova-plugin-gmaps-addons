@@ -10,9 +10,14 @@ Maps.autocomplete = function (queryString, successCallback, errorCallback) {
     exec(successCallback, errorCallback, "Maps", "autocomplete", [queryString]);
 };
 
-Maps.geocode = function (placeId, successCallback, errorCallback) {
-    argscheck.checkArgs('S', 'Maps.geocode', arguments);
-    exec(successCallback, errorCallback, "Maps", "geocode", [placeId]);
+Maps.geocode = function (coords, successCallback, errorCallback) {
+    argscheck.checkArgs('O', 'Maps.geocode', arguments);
+    exec(successCallback, errorCallback, "Maps", "geocode", [coords]);
+};
+
+Maps.reverseGeocode = function (address, successCallback, errorCallback) {
+    argscheck.checkArgs('S', 'Maps.reverseGeocode', arguments);
+    exec(successCallback, errorCallback, "Maps", "reverseGeocode", [address]);
 };
 
 Maps.directions = function (waypoints, routeParams, successCallback, errorCallback) {

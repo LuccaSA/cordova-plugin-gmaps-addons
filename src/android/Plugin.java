@@ -1,5 +1,9 @@
 package plugin.gmaps.addons;
 
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -7,9 +11,7 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.AutocompletePredictionBuffer;
-import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
@@ -22,6 +24,7 @@ import org.json.JSONObject;
 import org.json.JSONException;
 
 import java.util.Iterator;
+import java.util.Locale;
 
 public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObject> {
 
@@ -56,9 +59,14 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
             autocomplete(query, callbackContext);
             return true;
 
+        } else if (action.equals("reverseGeocode")) {
+            String address = args.getString(0);
+            reverseGeocode(address, callbackContext);
+            return true;
+
         } else if (action.equals("geocode")) {
-            String placeId = args.getString(0);
-            geocode(placeId, callbackContext);
+            JSONObject coords = args.getJSONObject(0);
+            geocode(coords, callbackContext);
             return true;
 
         } else if (action.equals("directions")) {
@@ -92,6 +100,7 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
                     place.put("fullText", prediction.getFullText(null));
                     place.put("primaryText", prediction.getPrimaryText(null));
                     place.put("secondaryText", prediction.getSecondaryText(null));
+
                 } catch (JSONException e) {
                     Log.e(TAG, e.getMessage());
                     e.printStackTrace();
@@ -99,48 +108,53 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
 
                 jsonResult.put(place);
             }
+
+            callbackContext.success(jsonResult);
         }
         else {
             Log.d(TAG, status.getStatusMessage());
             callbackContext.error(status.getStatusMessage());
         }
 
-        callbackContext.success(jsonResult);
         autocompletePredictions.release();
     }
 
-    private void geocode(String placeId, CallbackContext callbackContext) {
-        if (placeId.isEmpty()) {
-            callbackContext.error("Expected one non-empty string argument.");
+    private void reverseGeocode(String address, CallbackContext callbackContext) {
+        Geocoder geocoder = new Geocoder(cordova.getActivity(), Locale.getDefault());
+
+        try {
+            Address detailedAddress = geocoder.getFromLocationName(address, 1).get(0);
+
+            JSONObject jsonResult = new AddressParser().parse(detailedAddress);
+
+            callbackContext.success(jsonResult);
+
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+            callbackContext.error(e.getMessage());
         }
+    }
 
-        PendingResult<PlaceBuffer> result = Places.GeoDataApi.getPlaceById(_googleApiClient, placeId);
-        PlaceBuffer placeGeocodes = result.await();
+    private void geocode(JSONObject coords, CallbackContext callbackContext) {
+        Geocoder geocoder = new Geocoder(cordova.getActivity(), Locale.getDefault());
 
-        JSONObject geocode = new JSONObject();
-        Status status = placeGeocodes.getStatus();
-        if (status.isSuccess()) {
-            LatLng placeLatLng = placeGeocodes.get(0).getLatLng();
+        try {
+            Double lat = Double.parseDouble(coords.get("lat").toString());
+            Double lng = Double.parseDouble(coords.get("lng").toString());
 
-            try {
-                geocode.put("lat", placeLatLng.latitude);
-                geocode.put("lng", placeLatLng.longitude);
-                callbackContext.success(geocode);
 
-            } catch (JSONException e) {
-                Log.e(TAG, e.getMessage());
-                callbackContext.error(e.getMessage());
-            }
-        } else {
-            Log.d(TAG, status.getStatusMessage());
-            callbackContext.error(status.getStatusMessage());
+            Address address = geocoder.getFromLocation(lat, lng, 1).get(0);
+            JSONObject jsonResult = new AddressParser().parse(address);
+
+            callbackContext.success(jsonResult);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+            callbackContext.error(e.getMessage());
         }
-
-        placeGeocodes.release();
     }
 
     private void directions(JSONArray waypoints, JSONObject routeParams, CallbackContext callbackContext) {
-        String params = new DirectionsRequestBuilder().execute(waypoints, routeParams);
+        String params = new DirectionsRequestBuilder().execute(cordova.getActivity(), waypoints, routeParams);
         String url = "https://maps.googleapis.com/maps/api/directions/json?" + params;
 
         Log.d(TAG, "Asynchronously downloading directions");

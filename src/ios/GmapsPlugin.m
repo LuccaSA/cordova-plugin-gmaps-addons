@@ -1,5 +1,6 @@
 #import "GmapsPlugin.h"
 #import "GmapsRequestBuilder.h"
+#import "AddressParser.h"
 #import <Cordova/CDVPlugin.h>
 #import <GoogleMaps/GoogleMaps.h>
 
@@ -57,32 +58,55 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
 }
 
-- (void)geocode:(CDVInvokedUrlCommand*)command {
+- (void)reverseGeocode:(CDVInvokedUrlCommand*)command {
     callbackId = command.callbackId;
-    NSString *placeId = [command.arguments objectAtIndex:0];
+    NSString *address = [command.arguments objectAtIndex:0];
 
     __block CDVPluginResult* pluginResult = nil;
 
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT messageAsString:placeId];
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT messageAsString:nil];
     [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
 
-    [_placesClient lookUpPlaceID:placeId callback:^(GMSPlace *place, NSError *error) {
-        if (error != nil) {
-            NSLog(@"Place details error %@", [error localizedDescription]);
-            return;
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder geocodeAddressString:address completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        NSDictionary *jsonResult = [[NSDictionary alloc] init];
+
+        if ([placemarks count] > 0) {
+
+            CLPlacemark *mark = [placemarks objectAtIndex:0];
+            jsonResult = [[[AddressParser alloc] init] parse:mark];
         }
 
-        if (place == nil) {
-            NSLog(@"No place details for %@", placeId);
-            return;
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:jsonResult];
+        [pluginResult setKeepCallback:[NSNumber numberWithBool:NO]];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
+    }];
+
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
+}
+
+- (void)geocode:(CDVInvokedUrlCommand*)command {
+    callbackId = command.callbackId;
+    NSDictionary *coords = [command.arguments objectAtIndex:0];
+
+    __block CDVPluginResult* pluginResult = nil;
+
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_NO_RESULT messageAsString:nil];
+    [pluginResult setKeepCallback:[NSNumber numberWithBool:YES]];
+
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:[[coords valueForKey:@"lat"] doubleValue] longitude:[[coords valueForKey:@"lng"] doubleValue]];
+
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        NSDictionary *jsonResult = [[NSDictionary alloc] init];
+
+        if ([placemarks count] > 0) {
+
+            CLPlacemark *mark = [placemarks objectAtIndex:0];
+            jsonResult = [[[AddressParser alloc] init] parse:mark];
         }
 
-        NSDictionary *geocode = @{
-                                  @"lat": @(place.coordinate.latitude),
-                                  @"lng": @(place.coordinate.longitude)
-                                  };
-
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:geocode];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:jsonResult];
         [pluginResult setKeepCallback:[NSNumber numberWithBool:NO]];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
     }];

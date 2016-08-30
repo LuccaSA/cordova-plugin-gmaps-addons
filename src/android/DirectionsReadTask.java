@@ -3,6 +3,9 @@ package plugin.gmaps.addons;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class DirectionsReadTask extends AsyncTask<String, Void, String> {
     private ICallBackListener _listener;
 
@@ -25,6 +28,12 @@ public class DirectionsReadTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        new DirectionsParserTask(_listener).execute(result);
+
+        try {
+            _listener.callback(new JSONObject(result));
+
+        } catch (JSONException e) {
+            Log.d("Error parsing direction", e.toString());
+        }
     }
 }

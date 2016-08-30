@@ -64,7 +64,7 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
         } else if (action.equals("directions")) {
             JSONArray waypoints = args.getJSONArray(0);
             JSONObject routeParams = args.getJSONObject(1);
-            getDirections(waypoints, routeParams, callbackContext);
+            directions(waypoints, routeParams, callbackContext);
             return true;
         }
         return false;
@@ -125,20 +125,21 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
             try {
                 geocode.put("lat", placeLatLng.latitude);
                 geocode.put("lng", placeLatLng.longitude);
+                callbackContext.success(geocode);
+
             } catch (JSONException e) {
                 Log.e(TAG, e.getMessage());
-                e.printStackTrace();
+                callbackContext.error(e.getMessage());
             }
         } else {
             Log.d(TAG, status.getStatusMessage());
             callbackContext.error(status.getStatusMessage());
         }
 
-        callbackContext.success(geocode);
         placeGeocodes.release();
     }
 
-    private void getDirections(JSONArray waypoints, JSONObject routeParams, CallbackContext callbackContext) {
+    private void directions(JSONArray waypoints, JSONObject routeParams, CallbackContext callbackContext) {
         String params = new DirectionsRequestBuilder().execute(waypoints, routeParams);
         String url = "https://maps.googleapis.com/maps/api/directions/json?" + params;
 

@@ -112,35 +112,7 @@
     NSData *response = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
     NSDictionary *results = [NSJSONSerialization JSONObjectWithData:response options:0 error:nil];
 
-    NSDictionary *polylineOverview = [[[results objectForKey:@"routes"] objectAtIndex:0] objectForKey:@"overview_polyline"];
-    NSString *points = [polylineOverview objectForKey:@"points"];
-    GMSPath *path = [GMSPath pathFromEncodedPath:points];
-
-    NSMutableArray *routeWaypoints = [[NSMutableArray alloc] init];
-    for (int i=0; i<path.count; i++) {
-        CLLocationCoordinate2D location = [path coordinateAtIndex: (NSUInteger)i];
-        NSDictionary *waypoint = @{
-                                   @"lat": @(location.latitude),
-                                   @"lng": @(location.longitude)
-                                   };
-
-        [routeWaypoints addObject:waypoint];
-
-    }
-
-    NSNumber *distance = @(0);
-    NSArray *legs = [[[results objectForKey:@"routes"] objectAtIndex:0] objectForKey:@"legs"];
-    for (NSDictionary *leg in legs) {
-        distance = @([[leg objectForKey:@"distance"] intValue] + [distance intValue]);
-    }
-
-    NSDictionary *result = @{
-                             @"waypoints": routeWaypoints,
-                             @"distance": distance
-                             };
-
-    CDVPluginResult* pluginResult = nil;
-    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:results];
 
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 

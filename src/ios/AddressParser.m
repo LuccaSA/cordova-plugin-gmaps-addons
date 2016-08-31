@@ -9,7 +9,7 @@
                             };
 
     NSDictionary *jsonResult = @{
-                                 @"formattedAddress": placemark.name,
+                                 @"formattedAddress": [NSString stringWithFormat:@"%@, %@", placemark.name, placemark.locality],
                                  @"town": placemark.locality,
                                  @"countryName": placemark.country,
                                  @"countryIsoCode": placemark.ISOcountryCode,

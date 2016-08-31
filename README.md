@@ -51,7 +51,7 @@ eg:
 - `maps.addons.reverseGeocode({lat: 48.883364, lng: 2.327081}, (res) => console.log(res), (err) => console.log(err))`
 - `maps.addons.geocode('Place du Châtelet, Paris', (res) => console.log(res), (err) => console.log(err))`
 
-Given a coordinate object / address string, returns an address object (specified below).
+Given a coordinate object / address string, returns an array of addresses objects (specified below).
 
 #### Input
 
@@ -64,7 +64,7 @@ Given a coordinate object / address string, returns an address object (specified
 
 #### Output
 
-The success callback receives an object with the following properties :
+The success callback receives **an array of objects** with the following properties :
 
 | Attr             | Type     | Details                                                                                 |
 | ---------------- |:--------:| ----------------------------------------------------------------------------------------|

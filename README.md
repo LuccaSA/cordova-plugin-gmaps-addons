@@ -73,7 +73,7 @@ The success callback receives **an array of objects** with the following propert
 | town             | `string` | City - eg: `Paris`                                                                      |
 | countryName      | `string` | Country name - eg: `France`                                                             |
 | countryIsoCode   | `string` | Ccountry ISO code - eg: `FR`                                                            |
-| point            | `string` | Coordinate - eg: `{latitude: 48.883364, longitude: 2.327081}`                           |
+| point            | `string` | Coordinate - eg: `{lat: 48.883364, lng: 2.327081}`                           |
 
 ### Directions
 `directions(waypoints, routeParams, successCallback, errorCallback)`

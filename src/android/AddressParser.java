@@ -34,8 +34,8 @@ public class AddressParser {
         jsonResult.put("id", address.getLatitude() + "," + address.getLongitude());
 
         JSONObject point = new JSONObject();
-        point.put("latitude", address.getLatitude());
-        point.put("longitude", address.getLongitude());
+        point.put("lat", address.getLatitude());
+        point.put("lng", address.getLongitude());
         jsonResult.put("point", point);
 
         return jsonResult;

@@ -4,8 +4,8 @@
 
 -(NSDictionary*)parse:(CLPlacemark*)placemark {
     NSDictionary *point = @{
-                            @"latitude": [NSNumber numberWithDouble:placemark.location.coordinate.latitude],
-                            @"longitude": [NSNumber numberWithDouble:placemark.location.coordinate.longitude]
+                            @"lat": [NSNumber numberWithDouble:placemark.location.coordinate.latitude],
+                            @"lng": [NSNumber numberWithDouble:placemark.location.coordinate.longitude]
                             };
 
     NSDictionary *jsonResult = @{

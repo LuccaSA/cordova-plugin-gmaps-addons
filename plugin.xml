@@ -25,12 +25,11 @@
 
 	  <framework src="com.google.android.gms:play-services-location:+" />
 
-    <source-file src="src/android/DirectionsParserTask.java" target-dir="src/plugin/gmaps/addons/" />
+    <source-file src="src/android/AddressParser.java" target-dir="src/plugin/gmaps/addons/" />
     <source-file src="src/android/DirectionsReadTask.java" target-dir="src/plugin/gmaps/addons/" />
     <source-file src="src/android/DirectionsRequestBuilder.java" target-dir="src/plugin/gmaps/addons/" />
     <source-file src="src/android/HttpConnection.java" target-dir="src/plugin/gmaps/addons/" />
     <source-file src="src/android/ICallBackListener.java" target-dir="src/plugin/gmaps/addons/" />
-    <source-file src="src/android/PathJSONParser.java" target-dir="src/plugin/gmaps/addons/" />
     <source-file src="src/android/Plugin.java" target-dir="src/plugin/gmaps/addons/" />
 
     <preference name="API_KEY_FOR_ANDROID" />

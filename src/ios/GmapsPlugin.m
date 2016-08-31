@@ -58,7 +58,7 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
 }
 
-- (void)reverseGeocode:(CDVInvokedUrlCommand*)command {
+- (void)geocode:(CDVInvokedUrlCommand*)command {
     callbackId = command.callbackId;
     NSString *address = [command.arguments objectAtIndex:0];
 
@@ -85,7 +85,7 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
 }
 
-- (void)geocode:(CDVInvokedUrlCommand*)command {
+- (void)reverseGeocode:(CDVInvokedUrlCommand*)command {
     callbackId = command.callbackId;
     NSDictionary *coords = [command.arguments objectAtIndex:0];
 

@@ -59,14 +59,14 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
             autocomplete(query, callbackContext);
             return true;
 
-        } else if (action.equals("reverseGeocode")) {
+        } else if (action.equals("geocode")) {
             String address = args.getString(0);
-            reverseGeocode(address, callbackContext);
+            geocode(address, callbackContext);
             return true;
 
-        } else if (action.equals("geocode")) {
+        } else if (action.equals("reverseGeocode")) {
             JSONObject coords = args.getJSONObject(0);
-            geocode(coords, callbackContext);
+            reverseGeocode(coords, callbackContext);
             return true;
 
         } else if (action.equals("directions")) {
@@ -119,7 +119,7 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
         autocompletePredictions.release();
     }
 
-    private void reverseGeocode(String address, CallbackContext callbackContext) {
+    private void geocode(String address, CallbackContext callbackContext) {
         Geocoder geocoder = new Geocoder(cordova.getActivity(), Locale.getDefault());
 
         try {
@@ -135,7 +135,7 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
         }
     }
 
-    private void geocode(JSONObject coords, CallbackContext callbackContext) {
+    private void reverseGeocode(JSONObject coords, CallbackContext callbackContext) {
         Geocoder geocoder = new Geocoder(cordova.getActivity(), Locale.getDefault());
 
         try {

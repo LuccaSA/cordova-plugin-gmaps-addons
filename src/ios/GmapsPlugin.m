@@ -69,15 +69,13 @@
 
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     [geocoder geocodeAddressString:address completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
-        NSDictionary *jsonResult = [[NSDictionary alloc] init];
+        NSMutableArray *jsonResult = [[NSMutableArray alloc] init];
 
-        if ([placemarks count] > 0) {
-
-            CLPlacemark *mark = [placemarks objectAtIndex:0];
-            jsonResult = [[[AddressParser alloc] init] parse:mark];
+        for (CLPlacemark * placemark in placemarks) {
+            [jsonResult addObject:[[[AddressParser alloc] init] parse:placemark]];
         }
 
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:jsonResult];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:jsonResult];
         [pluginResult setKeepCallback:[NSNumber numberWithBool:NO]];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
     }];
@@ -98,15 +96,13 @@
 
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
-        NSDictionary *jsonResult = [[NSDictionary alloc] init];
+        NSMutableArray *jsonResult = [[NSMutableArray alloc] init];
 
-        if ([placemarks count] > 0) {
-
-            CLPlacemark *mark = [placemarks objectAtIndex:0];
-            jsonResult = [[[AddressParser alloc] init] parse:mark];
+        for (CLPlacemark * placemark in placemarks) {
+            [jsonResult addObject:[[[AddressParser alloc] init] parse:placemark]];
         }
 
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:jsonResult];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:jsonResult];
         [pluginResult setKeepCallback:[NSNumber numberWithBool:NO]];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
     }];

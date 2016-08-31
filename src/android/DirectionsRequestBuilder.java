@@ -42,12 +42,10 @@ public class DirectionsRequestBuilder {
                 query.put("waypoints", existingWaypoints + "|" + waypoints.getString(i));
             }
 
-            if (routeParams.has("unit")) {
-                query.put("unit", routeParams.get("unit"));
-            }
-
-            if (routeParams.has("avoid")) {
-                query.put("avoid", routeParams.get("avoid"));
+            Iterator<String> iterator = routeParams.keys();
+            while (iterator.hasNext()) {
+                String key = iterator.next();
+                query.put(key, routeParams.get(key));
             }
 
             return getQueryString(query);

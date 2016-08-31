@@ -20,7 +20,7 @@ public class DirectionsReadTask extends AsyncTask<String, Void, String> {
             HttpConnection http = new HttpConnection();
             data = http.readUrl(url[0]);
         } catch (Exception e) {
-            Log.d("Background Task", e.toString());
+            Log.d("HTTP call error", e.toString());
         }
         return data;
     }

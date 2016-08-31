@@ -32,12 +32,8 @@
 -(NSString*)getParams:(NSDictionary*)routeParams {
     NSString *query = @"";
 
-    if ([routeParams objectForKey:@"unit"]) {
-        query = [query stringByAppendingFormat:@"&unit=%@", [routeParams objectForKey:@"unit"]];
-    }
-
-    if ([routeParams objectForKey:@"avoid"]) {
-        query = [query stringByAppendingFormat:@"&avoid=%@", [routeParams objectForKey:@"avoid"]];
+    for (id key in routeParams) {
+        query = [query stringByAppendingFormat:@"&%@=%@", key, [routeParams objectForKey:key]];
     }
 
     return query;

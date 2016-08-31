@@ -2,11 +2,24 @@ package plugin.gmaps.addons;
 
 import android.location.Address;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class AddressParser {
-    public JSONObject parse(Address address) throws JSONException {
+    public JSONArray parse(List<Address> addresses) throws JSONException {
+        JSONArray jsonResult = new JSONArray();
+
+        for (Address address : addresses) {
+            jsonResult.put(parse(address));
+        }
+
+        return jsonResult;
+    }
+
+    private JSONObject parse(Address address) throws JSONException {
         JSONObject jsonResult = new JSONObject();
 
         StringBuilder formattedAddress = new StringBuilder("");

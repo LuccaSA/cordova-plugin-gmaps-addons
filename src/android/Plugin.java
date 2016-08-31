@@ -1,7 +1,5 @@
 package plugin.gmaps.addons;
 
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
@@ -23,7 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
-import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObject> {
@@ -35,9 +33,9 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         _googleApiClient = new GoogleApiClient
-                .Builder(cordova.getActivity())
-                .addApi(Places.GEO_DATA_API)
-                .build();
+            .Builder(cordova.getActivity())
+            .addApi(Places.GEO_DATA_API)
+            .build();
 
         _googleApiClient.connect();
 
@@ -90,10 +88,7 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
 
         Status status = autocompletePredictions.getStatus();
         if (status.isSuccess()) {
-            Iterator<AutocompletePrediction> iterator = autocompletePredictions.iterator();
-            while (iterator.hasNext()) {
-                AutocompletePrediction prediction = iterator.next();
-
+            for (AutocompletePrediction prediction : autocompletePredictions) {
                 JSONObject place = new JSONObject();
                 try {
                     place.put("placeId", prediction.getPlaceId());
@@ -123,9 +118,9 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
         Geocoder geocoder = new Geocoder(cordova.getActivity(), Locale.getDefault());
 
         try {
-            Address detailedAddress = geocoder.getFromLocationName(address, 1).get(0);
+            List<Address> addresses = geocoder.getFromLocationName(address, 5);
 
-            JSONObject jsonResult = new AddressParser().parse(detailedAddress);
+            JSONArray jsonResult = new AddressParser().parse(addresses);
 
             callbackContext.success(jsonResult);
 
@@ -143,8 +138,8 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
             Double lng = Double.parseDouble(coords.get("lng").toString());
 
 
-            Address address = geocoder.getFromLocation(lat, lng, 1).get(0);
-            JSONObject jsonResult = new AddressParser().parse(address);
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 5);
+            JSONArray jsonResult = new AddressParser().parse(addresses);
 
             callbackContext.success(jsonResult);
         } catch (Exception e) {

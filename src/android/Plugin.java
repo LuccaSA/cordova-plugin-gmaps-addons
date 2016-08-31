@@ -28,7 +28,6 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
 
     public static final String TAG = "GMAPS-ADDONS";
     private GoogleApiClient _googleApiClient;
-    private CallbackContext _callbackContext;
 
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -50,8 +49,6 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        _callbackContext = callbackContext;
-
         if (action.equals("autocomplete")) {
             String query = args.getString(0);
             autocomplete(query, callbackContext);
@@ -149,11 +146,12 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
     }
 
     private void directions(JSONArray waypoints, JSONObject routeParams, CallbackContext callbackContext) {
+
         String params = new DirectionsRequestBuilder().execute(cordova.getActivity(), waypoints, routeParams);
         String url = "https://maps.googleapis.com/maps/api/directions/json?" + params;
 
         Log.d(TAG, "Asynchronously downloading directions");
-        DirectionsReadTask downloadTask = new DirectionsReadTask(this);
+        DirectionsReadTask downloadTask = new DirectionsReadTask(this, callbackContext);
         downloadTask.execute(url);
 
         PluginResult pluginResult = new PluginResult(PluginResult.Status.NO_RESULT);
@@ -162,12 +160,12 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
         callbackContext.sendPluginResult(pluginResult);
     }
 
-    public void callback(JSONObject route) {
+    public void callback(JSONObject route, CallbackContext callbackContext) {
         Log.d(TAG, "Route callback fired");
 
         PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, route);
         pluginResult.setKeepCallback(false);
 
-        _callbackContext.sendPluginResult(pluginResult);
+        callbackContext.sendPluginResult(pluginResult);
     }
 }

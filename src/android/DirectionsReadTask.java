@@ -3,14 +3,17 @@ package plugin.gmaps.addons;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.apache.cordova.CallbackContext;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DirectionsReadTask extends AsyncTask<String, Void, String> {
     private ICallBackListener _listener;
+    private CallbackContext _callbackContext;
 
-    public DirectionsReadTask(ICallBackListener listener) {
+    public DirectionsReadTask(ICallBackListener listener, CallbackContext callbackContext) {
         _listener = listener;
+        _callbackContext = callbackContext;
     }
 
     @Override
@@ -30,7 +33,7 @@ public class DirectionsReadTask extends AsyncTask<String, Void, String> {
         super.onPostExecute(result);
 
         try {
-            _listener.callback(new JSONObject(result));
+            _listener.callback(new JSONObject(result), _callbackContext);
 
         } catch (JSONException e) {
             Log.d("Error parsing direction", e.toString());

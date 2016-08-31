@@ -6,7 +6,6 @@
 
 @implementation GmapsPlugin {
     GMSPlacesClient *_placesClient;
-    NSString *callbackId;
 }
 
 - (void) pluginInitialize {
@@ -15,8 +14,6 @@
 
 - (void)autocomplete:(CDVInvokedUrlCommand*)command
 {
-    callbackId = command.callbackId;
-
     __block CDVPluginResult* pluginResult = nil;
     NSString* query = [command.arguments objectAtIndex:0];
 
@@ -51,15 +48,15 @@
 
          pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:places];
          [pluginResult setKeepCallbackAsBool:NO];
-         [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
+         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
      }
      ];
 
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void)geocode:(CDVInvokedUrlCommand*)command {
-    callbackId = command.callbackId;
+
     NSString *address = [command.arguments objectAtIndex:0];
 
     __block CDVPluginResult* pluginResult = nil;
@@ -77,14 +74,14 @@
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:jsonResult];
         [pluginResult setKeepCallback:[NSNumber numberWithBool:NO]];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
 
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void)reverseGeocode:(CDVInvokedUrlCommand*)command {
-    callbackId = command.callbackId;
+
     NSDictionary *coords = [command.arguments objectAtIndex:0];
 
     __block CDVPluginResult* pluginResult = nil;
@@ -104,10 +101,10 @@
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:jsonResult];
         [pluginResult setKeepCallback:[NSNumber numberWithBool:NO]];
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
 
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 - (void)directions:(CDVInvokedUrlCommand*)command

@@ -1,11 +1,13 @@
 package plugin.gmaps.addons;
 
 import android.location.Address;
+import android.text.TextUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddressParser {
@@ -22,11 +24,11 @@ public class AddressParser {
     private JSONObject parse(Address address) throws JSONException {
         JSONObject jsonResult = new JSONObject();
 
-        StringBuilder formattedAddress = new StringBuilder("");
+        List<String> addressesLines = new ArrayList<String>();
         for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-            formattedAddress.append(address.getAddressLine(i)).append(", ");
+            addressesLines.add(address.getAddressLine(i));
         }
-        jsonResult.put("formattedAddress", formattedAddress.toString());
+        jsonResult.put("formattedAddress", TextUtils.join(", ", addressesLines));
 
         jsonResult.put("countryIsoCode", address.getCountryCode());
         jsonResult.put("countryName", address.getCountryName());

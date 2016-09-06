@@ -117,11 +117,14 @@
                      @"https://maps.googleapis.com/maps/api/directions/json?%@",
                      query];
 
-    NSLog(@"URL for directions: %@", url);
+    // Encode URL otherwise response is nil if it contains invalid characters such as accents (error nslocalizeddescription = "unsupported url")
+    NSString *escapedUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+
+    NSLog(@"URL for directions: %@", escapedUrl);
 
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setHTTPMethod: @"GET"];
-    [request setURL:[NSURL URLWithString: url]];
+    [request setURL:[NSURL URLWithString: escapedUrl]];
 
     NSURLResponse *urlResponse = nil;
     NSError *error = nil;

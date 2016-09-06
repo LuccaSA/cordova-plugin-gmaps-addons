@@ -9,6 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.InvalidParameterException;
 import java.util.Iterator;
 
@@ -33,13 +35,15 @@ public class DirectionsRequestBuilder {
             throw new InvalidParameterException("There must be at least two waypoints");
         }
         try {
-            query.put("origin", waypoints.getString(0));
-            query.put("destination", waypoints.getString(waypointsLength - 1));
+            String encoding = "UTF-8";
+
+            query.put("origin", URLEncoder.encode(waypoints.getString(0), encoding));
+            query.put("destination", URLEncoder.encode(waypoints.getString(waypointsLength - 1), encoding));
 
             for (int i = 1; i < waypointsLength - 1; i++) {
                 String existingWaypoints = (String) query.get("waypoints");
 
-                query.put("waypoints", existingWaypoints + "|" + waypoints.getString(i));
+                query.put("waypoints", existingWaypoints + "|" + URLEncoder.encode(waypoints.getString(i), encoding));
             }
 
             Iterator<String> iterator = routeParams.keys();
@@ -49,6 +53,10 @@ public class DirectionsRequestBuilder {
             }
 
             return getQueryString(query);
+
+        } catch (UnsupportedEncodingException e) {
+            Log.e(Plugin.TAG, e.getMessage());
+            e.printStackTrace();
 
         } catch (JSONException e) {
             Log.e(Plugin.TAG, e.getMessage());

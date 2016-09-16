@@ -21,16 +21,6 @@ public class DirectionsRequestBuilder {
 
         JSONObject query = routeParams;
 
-        try {
-            ApplicationInfo appliInfo = activity.getPackageManager().getApplicationInfo(activity.getPackageName(), PackageManager.GET_META_DATA);
-            String API_KEY = appliInfo.metaData.getString("com.google.android.geo.API_KEY");
-            query.put("key", API_KEY);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
         if (waypointsLength < 2) {
             throw new InvalidParameterException("There must be at least two waypoints");
         }

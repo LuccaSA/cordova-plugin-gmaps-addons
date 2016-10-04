@@ -4,12 +4,26 @@
 #import <Cordova/CDVPlugin.h>
 #import <GoogleMaps/GoogleMaps.h>
 
+@interface GmapsPlugin ()
+- (void) _sendCallbackErrorResult: (NSString*) errorMessage withCallbackId: (NSString*) id;
+@end
+
 @implementation GmapsPlugin {
     GMSPlacesClient *_placesClient;
 }
 
 - (void) pluginInitialize {
     _placesClient = [[GMSPlacesClient alloc] init];
+}
+
+- (void) _sendCallbackErrorResult:(NSString*) errorMessage withCallbackId: (NSString*) callbackId {
+    CDVPluginResult* pluginResult = nil;
+
+    NSLog(@"Error %@", errorMessage);
+
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMessage];
+    [pluginResult setKeepCallback:[NSNumber numberWithBool:NO]];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
 }
 
 - (void)autocomplete:(CDVInvokedUrlCommand*)command
@@ -30,7 +44,7 @@
                             callback: ^(NSArray *results, NSError *error)
      {
          if (error != nil) {
-             NSLog(@"Autocomplete error %@", [error localizedDescription]);
+             [self _sendCallbackErrorResult:[error localizedDescription] withCallbackId:command.callbackId];
              return;
          }
 
@@ -66,10 +80,17 @@
 
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     [geocoder geocodeAddressString:address completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        if (error != nil) {
+            [self _sendCallbackErrorResult:[error localizedDescription] withCallbackId:command.callbackId];
+            return;
+        }
+
         NSMutableArray *jsonResult = [[NSMutableArray alloc] init];
 
         for (CLPlacemark * placemark in placemarks) {
-            [jsonResult addObject:[[[AddressParser alloc] init] parse:placemark]];
+            if (placemark.locality != nil && placemark.name != nil) {
+                [jsonResult addObject:[[[AddressParser alloc] init] parse:placemark]];
+            }
         }
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:jsonResult];
@@ -93,10 +114,17 @@
 
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        if (error != nil) {
+            [self _sendCallbackErrorResult:[error localizedDescription] withCallbackId:command.callbackId];
+            return;
+        }
+
         NSMutableArray *jsonResult = [[NSMutableArray alloc] init];
 
         for (CLPlacemark * placemark in placemarks) {
-            [jsonResult addObject:[[[AddressParser alloc] init] parse:placemark]];
+            if (placemark.locality != nil && placemark.name != nil) {
+                [jsonResult addObject:[[[AddressParser alloc] init] parse:placemark]];
+            }
         }
 
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:jsonResult];

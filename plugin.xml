@@ -24,6 +24,7 @@
     </config-file>
 
 	  <framework src="com.google.android.gms:play-services-location:+" />
+	  <framework src="com.google.android.gms:play-services-places:+" />
 
     <source-file src="src/android/AddressParser.java" target-dir="src/plugin/gmaps/addons/" />
     <source-file src="src/android/DirectionsReadTask.java" target-dir="src/plugin/gmaps/addons/" />

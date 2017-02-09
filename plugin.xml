@@ -44,6 +44,7 @@
 
   <!-- ios -->
   <platform name="ios">
+      <preference name="API_KEY_FOR_IOS" />
       <config-file target="config.xml" parent="/*">
         <feature name="Maps">
           <param name="ios-package" value="GmapsPlugin" />

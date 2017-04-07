@@ -31,8 +31,7 @@ public class DirectionsRequestBuilder {
             query.put("destination", URLEncoder.encode(waypoints.getString(waypointsLength - 1), encoding));
 
             for (int i = 1; i < waypointsLength - 1; i++) {
-                String existingWaypoints = (String) query.get("waypoints");
-
+                String existingWaypoints = query.has("waypoints") ? (String) query.get("waypoints") : "";
                 query.put("waypoints", existingWaypoints + "|" + URLEncoder.encode(waypoints.getString(i), encoding));
             }
 

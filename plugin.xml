@@ -12,7 +12,7 @@
     <clobbers target="gmaps.addons" />
   </js-module>
 
-  <dependency id="cordova-plugin-googlemaps" url="https://github.com/mapsplugin/cordova-plugin-googlemaps" />
+  <dependency id="cordova-plugin-googlemaps" url="https://github.com/stubbst/cordova-plugin-googlemaps" />
 
   <!-- android -->
   <platform name="android">

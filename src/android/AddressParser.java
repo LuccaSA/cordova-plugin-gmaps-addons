@@ -10,6 +10,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.lang.Exception;
+
 public class AddressParser {
     public JSONArray parse(List<Address> addresses) throws JSONException {
         JSONArray jsonResult = new JSONArray();
@@ -24,11 +26,8 @@ public class AddressParser {
     private JSONObject parse(Address address) throws JSONException {
         JSONObject jsonResult = new JSONObject();
 
-        List<String> addressesLines = new ArrayList<String>();
-        for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-            addressesLines.add(address.getAddressLine(i));
-        }
-        jsonResult.put("formattedAddress", TextUtils.join(", ", addressesLines));
+        List<String> addressLines = this.getAddressLines(address); 
+        jsonResult.put("formattedAddress", TextUtils.join(", ", addressLines));
 
         jsonResult.put("countryIsoCode", address.getCountryCode());
         jsonResult.put("countryName", address.getCountryName());
@@ -41,5 +40,23 @@ public class AddressParser {
         jsonResult.put("point", point);
 
         return jsonResult;
+    }
+
+    private List<String> getAddressLines(Address address) {
+
+        List<String> addressLines = new ArrayList<String>();
+
+        int addressLinesCount = address.getMaxAddressLineIndex() + 1;
+        // +1 fixes off-by-one error for Android 7+ https://stackoverflow.com/a/45325913
+
+        for (int i = 0; i < addressLinesCount; i++) {
+            
+            try {
+                String addressLine = address.getAddressLine(i);
+                addressLines.add(addressLine);
+            } catch(Exception e) { }
+        }
+
+        return addressLines;
     }
 }

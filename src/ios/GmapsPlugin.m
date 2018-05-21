@@ -139,11 +139,12 @@
 {
     NSArray *inputWaypoints = [command.arguments objectAtIndex:0];
     NSDictionary *routeParams = [command.arguments objectAtIndex:1];
+    NSString *APIKey = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"Google Maps API Key"];
     NSString *query = [[[GmapsRequestBuilder alloc] init] execute:inputWaypoints withParams:routeParams];
 
     NSString *url = [NSString stringWithFormat:
-                     @"https://maps.googleapis.com/maps/api/directions/json?%@",
-                     query];
+                     @"https://maps.googleapis.com/maps/api/directions/json?%@&key=%@",
+                     query, APIKey];
 
     // Encode URL otherwise response is nil if it contains invalid characters such as accents (error nslocalizeddescription = "unsupported url")
     NSString *escapedUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];

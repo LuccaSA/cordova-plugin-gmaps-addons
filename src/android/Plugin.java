@@ -2,6 +2,10 @@ package plugin.gmaps.addons;
 
 import android.location.Address;
 import android.location.Geocoder;
+import android.app.Activity;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -146,8 +150,11 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
     }
 
     private void directions(JSONArray waypoints, JSONObject routeParams, CallbackContext callbackContext) {
+        Activity activity = cordova.getActivity();
+        String params = new DirectionsRequestBuilder().execute(activity, waypoints, routeParams);
 
-        String params = new DirectionsRequestBuilder().execute(cordova.getActivity(), waypoints, routeParams);
+        // Append API key
+        params += "&key=" + this.getApiKey(activity);
         String url = "https://maps.googleapis.com/maps/api/directions/json?" + params;
 
         Log.d(TAG, "Asynchronously downloading directions");
@@ -158,6 +165,15 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
         pluginResult.setKeepCallback(true);
 
         callbackContext.sendPluginResult(pluginResult);
+    }
+
+    private String getApiKey(Activity activity) {
+        ApplicationInfo appliInfo = null;
+        try {
+            appliInfo = activity.getPackageManager().getApplicationInfo(activity.getPackageName(), PackageManager.GET_META_DATA);
+        } catch (NameNotFoundException e) {}
+
+        return appliInfo.metaData.getString("com.google.android.geo.API_KEY");
     }
 
     public void callback(JSONObject route, CallbackContext callbackContext) {

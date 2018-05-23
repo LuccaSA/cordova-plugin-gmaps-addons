@@ -20,12 +20,4 @@ Maps.reverseGeocode = function (coords, successCallback, errorCallback) {
     exec(successCallback, errorCallback, "Maps", "reverseGeocode", [coords]);
 };
 
-Maps.directions = function (waypoints, routeParams, successCallback, errorCallback) {
-    argscheck.checkArgs('AO', 'Maps.directions', arguments);
-
-    waypoints = waypoints.map(function (v) { return v.split(' ').join('+'); })
-    exec(successCallback, errorCallback, "Maps", "directions", [waypoints, routeParams]);
-};
-
-
 module.exports = Maps;

@@ -1,5 +1,4 @@
 #import "GmapsPlugin.h"
-#import "GmapsRequestBuilder.h"
 #import "AddressParser.h"
 #import <Cordova/CDVPlugin.h>
 #import <GoogleMaps/GoogleMaps.h>
@@ -133,38 +132,6 @@
     }];
 
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
-
-- (void)directions:(CDVInvokedUrlCommand*)command
-{
-    NSArray *inputWaypoints = [command.arguments objectAtIndex:0];
-    NSDictionary *routeParams = [command.arguments objectAtIndex:1];
-    NSString *APIKey = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"Google Maps API Key"];
-    NSString *query = [[[GmapsRequestBuilder alloc] init] execute:inputWaypoints withParams:routeParams];
-
-    NSString *url = [NSString stringWithFormat:
-                     @"https://maps.googleapis.com/maps/api/directions/json?%@&key=%@",
-                     query, APIKey];
-
-    // Encode URL otherwise response is nil if it contains invalid characters such as accents (error nslocalizeddescription = "unsupported url")
-    NSString *escapedUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-
-    NSLog(@"URL for directions: %@", escapedUrl);
-
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setHTTPMethod: @"GET"];
-    [request setURL:[NSURL URLWithString: escapedUrl]];
-
-    NSURLResponse *urlResponse = nil;
-    NSError *error = nil;
-
-    NSData *response = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
-    NSDictionary *results = [NSJSONSerialization JSONObjectWithData:response options:0 error:nil];
-
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:results];
-
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-
 }
 
 @end

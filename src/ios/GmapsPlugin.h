@@ -5,6 +5,5 @@
 - (void)autocomplete:(CDVInvokedUrlCommand*)command;
 - (void)reverseGeocode:(CDVInvokedUrlCommand*)command;
 - (void)geocode:(CDVInvokedUrlCommand*)command;
-- (void)directions:(CDVInvokedUrlCommand*)command;
 
 @end

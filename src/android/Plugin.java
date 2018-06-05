@@ -2,7 +2,6 @@ package plugin.gmaps.addons;
 
 import android.location.Address;
 import android.location.Geocoder;
-import android.app.Activity;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;

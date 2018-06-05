@@ -24,17 +24,14 @@ import org.json.JSONException;
 import java.util.List;
 import java.util.Locale;
 
-public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObject> {
+public class Plugin extends CordovaPlugin {
 
     public static final String TAG = "GMAPS-ADDONS";
     private GoogleApiClient _googleApiClient;
 
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
-        _googleApiClient = new GoogleApiClient
-            .Builder(cordova.getActivity())
-            .addApi(Places.GEO_DATA_API)
-            .build();
+        _googleApiClient = new GoogleApiClient.Builder(cordova.getActivity()).addApi(Places.GEO_DATA_API).build();
 
         _googleApiClient.connect();
 
@@ -64,11 +61,6 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
             reverseGeocode(coords, callbackContext);
             return true;
 
-        } else if (action.equals("directions")) {
-            JSONArray waypoints = args.getJSONArray(0);
-            JSONObject routeParams = args.getJSONObject(1);
-            directions(waypoints, routeParams, callbackContext);
-            return true;
         }
         return false;
     }
@@ -78,7 +70,8 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
             callbackContext.error("Expected one non-empty string argument.");
         }
 
-        PendingResult<AutocompletePredictionBuffer> result = Places.GeoDataApi.getAutocompletePredictions(_googleApiClient, query, null, null);
+        PendingResult<AutocompletePredictionBuffer> result = Places.GeoDataApi
+                .getAutocompletePredictions(_googleApiClient, query, null, null);
         AutocompletePredictionBuffer autocompletePredictions = result.await();
 
         JSONArray jsonResult = new JSONArray();
@@ -102,8 +95,7 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
             }
 
             callbackContext.success(jsonResult);
-        }
-        else {
+        } else {
             Log.d(TAG, status.getStatusMessage());
             callbackContext.error(status.getStatusMessage());
         }
@@ -134,7 +126,6 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
             Double lat = Double.parseDouble(coords.get("lat").toString());
             Double lng = Double.parseDouble(coords.get("lng").toString());
 
-
             List<Address> addresses = geocoder.getFromLocation(lat, lng, 5);
             JSONArray jsonResult = new AddressParser().parse(addresses);
 
@@ -143,29 +134,5 @@ public class Plugin extends CordovaPlugin implements ICallBackListener<JSONObjec
             Log.e(TAG, e.getMessage());
             callbackContext.error(e.getMessage());
         }
-    }
-
-    private void directions(JSONArray waypoints, JSONObject routeParams, CallbackContext callbackContext) {
-
-        String params = new DirectionsRequestBuilder().execute(cordova.getActivity(), waypoints, routeParams);
-        String url = "https://maps.googleapis.com/maps/api/directions/json?" + params;
-
-        Log.d(TAG, "Asynchronously downloading directions");
-        DirectionsReadTask downloadTask = new DirectionsReadTask(this, callbackContext);
-        downloadTask.execute(url);
-
-        PluginResult pluginResult = new PluginResult(PluginResult.Status.NO_RESULT);
-        pluginResult.setKeepCallback(true);
-
-        callbackContext.sendPluginResult(pluginResult);
-    }
-
-    public void callback(JSONObject route, CallbackContext callbackContext) {
-        Log.d(TAG, "Route callback fired");
-
-        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, route);
-        pluginResult.setKeepCallback(false);
-
-        callbackContext.sendPluginResult(pluginResult);
     }
 }

@@ -1,68 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-    id="cordova-plugin-gmaps-addons"
-    version="0.1.0">
-    <name>Cordova GMaps Addons</name>
-    <description>Google Maps native SDK addons</description>
-    <license>Apache 2.0</license>
-    <keywords>Android, iOS, Gmaps</keywords>
-
+<plugin 
+  xmlns="http://apache.org/cordova/ns/plugins/1.0" id="cordova-plugin-gmaps-addons" version="0.1.0">
+  <name>Cordova GMaps Addons</name>
+  <description>Google Maps native SDK addons</description>
+  <license>Apache 2.0</license>
+  <keywords>Android, iOS, Gmaps</keywords>
   <js-module src="www/maps.js" name="gmaps-addons">
     <clobbers target="gmaps.addons" />
   </js-module>
-
   <dependency id="cordova-plugin-googlemaps" url="https://github.com/stubbst/cordova-plugin-googlemaps" />
-
   <!-- android -->
   <platform name="android">
-
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="Maps">
         <param name="android-package" value="plugin.gmaps.addons.Plugin" />
       </feature>
     </config-file>
-
-	  <framework src="com.google.android.gms:play-services-location:+" />
-	  <framework src="com.google.android.gms:play-services-places:+" />
-
+    <framework src="com.google.android.gms:play-services-location:+" />
+    <framework src="com.google.android.gms:play-services-places:+" />
     <source-file src="src/android/AddressParser.java" target-dir="src/plugin/gmaps/addons/" />
-    <source-file src="src/android/DirectionsReadTask.java" target-dir="src/plugin/gmaps/addons/" />
-    <source-file src="src/android/DirectionsRequestBuilder.java" target-dir="src/plugin/gmaps/addons/" />
-    <source-file src="src/android/HttpConnection.java" target-dir="src/plugin/gmaps/addons/" />
-    <source-file src="src/android/ICallBackListener.java" target-dir="src/plugin/gmaps/addons/" />
     <source-file src="src/android/Plugin.java" target-dir="src/plugin/gmaps/addons/" />
-
     <preference name="API_KEY_FOR_ANDROID" />
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
-      <meta-data
-      android:name="com.google.android.geo.API_KEY"
-      android:value="$API_KEY_FOR_ANDROID" />
+      <meta-data android:name="com.google.android.geo.API_KEY" android:value="$API_KEY_FOR_ANDROID" />
     </config-file>
-
   </platform>
-
   <!-- ios -->
   <platform name="ios">
-      <preference name="API_KEY_FOR_IOS" />
-      <config-file target="config.xml" parent="/*">
-        <feature name="Maps">
-          <param name="ios-package" value="GmapsPlugin" />
-        </feature>
-      </config-file>
-
-      <header-file src="src/ios/GmapsPlugin.h" />
-      <source-file src="src/ios/GmapsPlugin.m" />
-
-      <header-file src="src/ios/GmapsRequestBuilder.h" />
-      <source-file src="src/ios/GmapsRequestBuilder.m" />
-
-      <header-file src="src/ios/AddressParser.h" />
-      <source-file src="src/ios/AddressParser.m" />
-
-      <dependency id="com.googlemaps.ios" url="https://bitbucket.org/nightstomp/cordova-plugin-googlemaps-sdk.git" commit="master" />
+    <preference name="API_KEY_FOR_IOS" />
+    <config-file target="config.xml" parent="/*">
+      <feature name="Maps">
+        <param name="ios-package" value="GmapsPlugin" />
+      </feature>
+    </config-file>
+    <header-file src="src/ios/GmapsPlugin.h" />
+    <source-file src="src/ios/GmapsPlugin.m" />
+    <header-file src="src/ios/AddressParser.h" />
+    <source-file src="src/ios/AddressParser.m" />
+    <dependency id="com.googlemaps.ios" url="https://bitbucket.org/nightstomp/cordova-plugin-googlemaps-sdk.git" commit="master" />
   </platform>
-
   <engines>
     <engine name="cordova" version=">=4.0.0" />
   </engines>

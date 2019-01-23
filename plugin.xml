@@ -8,7 +8,7 @@
   <js-module src="www/maps.js" name="gmaps-addons">
     <clobbers target="gmaps.addons" />
   </js-module>
-  <dependency id="cordova-plugin-googlemaps" url="https://github.com/shajz/cordova-plugin-googlemaps.git#fix.ios.sdk" />
+  <dependency id="cordova-plugin-googlemaps" url="https://github.com/stubbst/cordova-plugin-googlemaps.git" />
   <!-- android -->
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">

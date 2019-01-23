@@ -8,7 +8,7 @@
   <js-module src="www/maps.js" name="gmaps-addons">
     <clobbers target="gmaps.addons" />
   </js-module>
-  <dependency id="cordova-plugin-googlemaps" url="https://github.com/stubbst/cordova-plugin-googlemaps" />
+  <dependency id="cordova-plugin-googlemaps" url="https://github.com/stubbst/cordova-plugin-googlemaps.git" />
   <!-- android -->
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
@@ -37,7 +37,7 @@
     <source-file src="src/ios/GmapsPlugin.m" />
     <header-file src="src/ios/AddressParser.h" />
     <source-file src="src/ios/AddressParser.m" />
-    <dependency id="com.googlemaps.ios" url="https://bitbucket.org/nightstomp/cordova-plugin-googlemaps-sdk.git" commit="master" />
+    <dependency id="com.googlemaps.ios" url="https://github.com/helixhuang/cordova-plugin-googlemaps-sdk.git" commit="master" />
   </platform>
   <engines>
     <engine name="cordova" version=">=4.0.0" />

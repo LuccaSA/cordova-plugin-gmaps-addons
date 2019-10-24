@@ -1,0 +1,14 @@
+{
+  "name": "cordova-plugin-gmaps-addons",
+  "version": "2.1.0",
+  "description": "Google Maps native SDK addons",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LuccaSA/cordova-plugin-gmaps-addons.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LuccaSA/cordova-plugin-gmaps-addons/issues"
+  },
+  "homepage": "https://github.com/LuccaSA/cordova-plugin-gmaps-addons#readme"
+}

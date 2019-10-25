@@ -30,7 +30,7 @@
     <source-file src="src/ios/GmapsPlugin.m" />
     <header-file src="src/ios/AddressParser.h" />
     <source-file src="src/ios/AddressParser.m" />
-    <dependency id="com.googlemaps.ios" url="https://github.com/helixhuang/cordova-plugin-googlemaps-sdk.git" commit="master" />
+    <framework src="GoogleMaps" type="podspec" spec="~> 1.13.0" />
   </platform>
   <engines>
     <engine name="cordova" version=">=4.0.0" />

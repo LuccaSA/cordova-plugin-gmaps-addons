@@ -9,10 +9,13 @@
       "android"
     ]
   },
-  "engines": [{
-    "name": "cordova",
-    "version": ">=3.5.0"
-  }],
+  "engines": {
+    "cordovaDependencies": {
+      "2.1.0": {
+        "cordova": ">=4.0.0"
+      }
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LuccaSA/cordova-plugin-gmaps-addons.git"
